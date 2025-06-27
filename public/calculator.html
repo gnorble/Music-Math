@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical Calculator - Music Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .calculator-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .calculator-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .calculator-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+
+        .calculator-body {
+            padding: 20px;
+        }
+
+        .display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            font-size: 1.5rem;
+            font-family: 'Courier New', monospace;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            word-break: break-all;
+        }
+
+        .angle-mode {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .angle-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .angle-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .buttons {
+            display: grid;
+            gap: 10px;
+        }
+
+        .trig-buttons {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .basic-buttons {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-number {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-number:hover {
+            background: #bbdefb;
+        }
+
+        .btn-operator {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .btn-operator:hover {
+            background: #ffe0b2;
+        }
+
+        .btn-function {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .btn-function:hover {
+            background: #e1bee7;
+        }
+
+        .btn-equals {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-equals:hover {
+            opacity: 0.9;
+        }
+
+        .btn-clear {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .btn-clear:hover {
+            background: #ffcdd2;
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .error {
+            color: #d32f2f;
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                max-width: 350px;
+            }
+            
+            .btn {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .display {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Mathematical Calculator</h1>
+            <p>For Music & Audio Mathematics</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('trig')">Trigonometric</button>
+            <button class="tab" onclick="switchTab('basic')">Basic</button>
+        </div>
+
+        <div class="calculator-body">
+            <div class="display" id="display">0</div>
+
+            <!-- Trigonometric Calculator -->
+            <div id="trig-content" class="tab-content active">
+                <div class="angle-mode">
+                    <button class="angle-btn active" id="deg-btn" onclick="setAngleMode('deg')">DEG</button>
+                    <button class="angle-btn" id="rad-btn" onclick="setAngleMode('rad')">RAD</button>
+                </div>
+
+                <div class="buttons trig-buttons">
+                    <button class="btn btn-function" onclick="appendFunction('sin(')">sin</button>
+                    <button class="btn btn-function" onclick="appendFunction('cos(')">cos</button>
+                    <button class="btn btn-function" onclick="appendFunction('tan(')">tan</button>
+                    <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+
+                    <button class="btn btn-function" onclick="appendFunction('asin(')">sin⁻¹</button>
+                    <button class="btn btn-function" onclick="appendFunction('acos(')">cos⁻¹</button>
+                    <button class="btn btn-function" onclick="appendFunction('atan(')">tan⁻¹</button>
+                    <button class="btn btn-function" onclick="deleteLast()">⌫</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('/')">/</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('*')">×</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('0')">0</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('.')">.</button>
+                    <button class="btn btn-function" onclick="appendToDisplay('3.14159')">π</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+
+                    <button class="btn btn-function" onclick="appendFunction('sqrt(')">√</button>
+                    <button class="btn btn-function" onclick="appendToDisplay('(')">(</button>
+                    <button class="btn btn-function" onclick="appendToDisplay(')')">)</button>
+                    <button class="btn btn-equals" onclick="calculate()">=</button>
+                </div>
+            </div>
+
+            <!-- Basic Calculator -->
+            <div id="basic-content" class="tab-content">
+                <div class="buttons basic-buttons">
+                    <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+                    <button class="btn btn-function" onclick="deleteLast()">⌫</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('%')">%</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('/')">/</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('*')">×</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+
+                    <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+
+                    <button class="btn btn-number btn-zero" onclick="appendToDisplay('0')">0</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('.')">.</button>
+                    <button class="btn btn-equals" onclick="calculate()">=</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '0';
+        let angleMode = 'deg'; // 'deg' or 'rad'
+        let shouldResetDisplay = false;
+
+        function updateDisplay() {
+            const display = document.getElementById('display');
+            display.textContent = currentInput;
+            
+            if (currentInput === 'Error' || currentInput === 'Domain Error') {
+                display.classList.add('error');
+            } else {
+                display.classList.remove('error');
+            }
+        }
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tab}-content`).classList.add('active');
+        }
+
+        function setAngleMode(mode) {
+            angleMode = mode;
+            document.querySelectorAll('.angle-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`${mode}-btn`).classList.add('active');
+        }
+
+        function appendToDisplay(value) {
+            if (shouldResetDisplay || currentInput === '0' || currentInput === 'Error' || currentInput === 'Domain Error') {
+                currentInput = value;
+                shouldResetDisplay = false;
+            } else {
+                currentInput += value;
+            }
+            updateDisplay();
+        }
+
+        function appendFunction(func) {
+            if (shouldResetDisplay || currentInput === '0' || currentInput === 'Error' || currentInput === 'Domain Error') {
+                currentInput = func;
+                shouldResetDisplay = false;
+            } else {
+                currentInput += func;
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function toRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function toDegrees(radians) {
+            return radians * (180 / Math.PI);
+        }
+
+        function calculate() {
+            try {
+                let expression = currentInput;
+                
+                // Replace display symbols with JavaScript operators
+                expression = expression.replace(/×/g, '*');
+                expression = expression.replace(/÷/g, '/');
+                
+                // Handle trigonometric functions
+                expression = expression.replace(/sin\(/g, 'Math.sin(');
+                expression = expression.replace(/cos\(/g, 'Math.cos(');
+                expression = expression.replace(/tan\(/g, 'Math.tan(');
+                expression = expression.replace(/asin\(/g, 'Math.asin(');
+                expression = expression.replace(/acos\(/g, 'Math.acos(');
+                expression = expression.replace(/atan\(/g, 'Math.atan(');
+                expression = expression.replace(/sqrt\(/g, 'Math.sqrt(');
+                
+                // Convert angles for trigonometric functions if in degree mode
+                if (angleMode === 'deg') {
+                    // For regular trig functions, convert input to radians
+                    expression = expression.replace(/Math\.sin\(/g, 'Math.sin(toRadians(');
+                    expression = expression.replace(/Math\.cos\(/g, 'Math.cos(toRadians(');
+                    expression = expression.replace(/Math\.tan\(/g, 'Math.tan(toRadians(');
+                    
+                    // For inverse trig functions, convert output to degrees
+                    expression = expression.replace(/Math\.asin\(/g, 'toDegrees(Math.asin(');
+                    expression = expression.replace(/Math\.acos\(/g, 'toDegrees(Math.acos(');
+                    expression = expression.replace(/Math\.atan\(/g, 'toDegrees(Math.atan(');
+                }
+                
+                // Handle percentage
+                expression = expression.replace(/(\d+(?:\.\d+)?)%/g, '($1/100)');
+                
+                // Evaluate the expression
+                let result = eval(expression);
+                
+                // Check for domain errors
+                if (isNaN(result) || !isFinite(result)) {
+                    currentInput = 'Domain Error';
+                } else {
+                    // Round to avoid floating point precision issues
+                    result = Math.round(result * 1000000000) / 1000000000;
+                    currentInput = result.toString();
+                }
+                
+                shouldResetDisplay = true;
+                updateDisplay();
+                
+            } catch (error) {
+                currentInput = 'Error';
+                shouldResetDisplay = true;
+                updateDisplay();
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            // Prevent default behavior for certain keys
+            if (['+', '-', '*', '/', '=', 'Enter', 'Escape', 'c', 'C'].includes(key)) {
+                event.preventDefault();
+            }
+            
+            if (key >= '0' && key <= '9') {
+                appendToDisplay(key);
+            } else if (key === '.') {
+                appendToDisplay('.');
+            } else if (key === '+') {
+                appendToDisplay('+');
+            } else if (key === '-') {
+                appendToDisplay('-');
+            } else if (key === '*') {
+                appendToDisplay('*');
+            } else if (key === '/') {
+                appendToDisplay('/');
+            } else if (key === '=' || key === 'Enter') {
+                calculate();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            } else if (key === '(') {
+                appendToDisplay('(');
+            } else if (key === ')') {
+                appendToDisplay(')');
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
