@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics for Musicians - Interactive Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #faf5ff 100%);
+            min-height: 100vh;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: #6b7280;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .nav-button {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .nav-button-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .nav-button-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .nav-button.active .nav-button-subtitle {
+            color: #dbeafe;
+        }
+
+        .chapter-header {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+        }
+
+        .chapter-info {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+        }
+
+        .chapter-meta {
+            text-align: right;
+            font-size: 0.875rem;
+        }
+
+        .alert {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section h3 {
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p {
+            color: #1e40af;
+            line-height: 1.6;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .feature-box h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-list {
+            list-style: disc;
+            list-style-position: inside;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .feature-list li {
+            margin-bottom: 0.25rem;
+        }
+
+        .equation-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .equation {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mathematics for Musicians</h1>
+            <p>An Interactive Course in Trigonometry and Calculus</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">🎵</span>
+                            Trigonometry
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <button class="nav-button active" onclick="showChapter('trig-intro')">
+                            <div class="nav-button-title">What is Trigonometry?</div>
+                            <div class="nav-button-subtitle">Introduction</div>
+                        </button>
+                        <button class="nav-button" onclick="showChapter('trig-1')">
+                            <div class="nav-button-title">Angles and the Unit Circle</div>
+                            <div class="nav-button-subtitle">Beginner</div>
+                        </button>
+                        <button class="nav-button" onclick="showChapter('trig-2')">
+                            <div class="nav-button-title">Basic Trigonometric Functions</div>
+                            <div class="nav-button-subtitle">Beginner</div>
+                        </button>
+                        <button class="nav-button" onclick="showChapter('trig-3')">
+                            <div class="nav-button-title">Graphing Trigonometric Functions</div>
+                            <div class="nav-button-subtitle">Intermediate</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">📈</span>
+                            Calculus
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <button class="nav-button" onclick="showChapter('calc-intro')">
+                            <div class="nav-button-title">What is Calculus?</div>
+                            <div class="nav-button-subtitle">Introduction</div>
+                        </button>
+                        <button class="nav-button" onclick="showChapter('calc-1')">
+                            <div class="nav-button-title">Limits and Continuity</div>
+                            <div class="nav-button-subtitle">Beginner</div>
+                        </button>
+                        <button class="nav-button" onclick="showChapter('calc-2')">
+                            <div class="nav-button-title">Introduction to Derivatives</div>
+                            <div class="nav-button-subtitle">Beginner</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Quick Reference</div>
+                    </div>
+                    <div class="card-content">
+                        <button class="nav-button" onclick="showReference()">Math Symbols</button>
+                        <button class="nav-button" onclick="showProblemSolving()">Problem Solving</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Chapter Header -->
+                <div class="card chapter-header">
+                    <div class="card-content">
+                        <div class="chapter-info">
+                            <div>
+                                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">What is Trigonometry?</h2>
+                                <p style="color: #6b7280;">Understanding the big picture and why it matters for music</p>
+                            </div>
+                            <div class="chapter-meta">
+                                <div style="font-weight: 500;">Introduction</div>
+                                <div style="color: #6b7280;">Definition • Historical context • Musical applications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter Content -->
+                <div id="chapter-content">
+                    <div class="alert">
+                        <div class="alert-title">
+                            <span class="icon">🧠</span>
+                            For Humanities Learners
+                        </div>
+                        <p>This introduction is designed specifically for those coming from non-mathematical backgrounds. We'll build understanding step by step, connecting abstract concepts to familiar musical ideas.</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title" style="font-size: 1.5rem;">What is Trigonometry?</h2>
+                            <p style="color: #6b7280; margin-top: 0.5rem;">Understanding the study of triangles and circular motion</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="content-section">
+                                <h3>The Simple Definition</h3>
+                                <p style="margin-bottom: 1rem;"><strong>Trigonometry</strong> is the study of triangles and circles. The word comes from Greek: "trigon" (triangle) + "metry" (measurement). But it's much more than just measuring triangles— it's the mathematics of <em>periodic motion</em> and <em>waves</em>.</p>
+                                <p>Think of it as the mathematical language that describes anything that repeats in a regular pattern: ocean waves, pendulum swings, seasonal changes, and most importantly for us—<strong>sound waves</strong>.</p>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="feature-box" style="background: #f0fdf4; border-color: #bbf7d0;">
+                                    <h4 style="color: #166534;">
+                                        <span class="icon">📚</span>
+                                        Historical Context
+                                    </h4>
+                                    <p style="color: #166534; font-size: 0.875rem; margin-bottom: 0.5rem;">Ancient civilizations used trigonometry for:</p>
+                                    <ul class="feature-list" style="color: #166534;">
+                                        <li>Navigation (finding direction by stars)</li>
+                                        <li>Architecture (building pyramids and temples)</li>
+                                        <li>Astronomy (predicting celestial events)</li>
+                                        <li>Music (understanding string vibrations)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="feature-box" style="background: #fdf4ff; border-color: #e9d5ff;">
+                                    <h4 style="color: #7c2d12;">
+                                        <span class="icon">🎵</span>
+                                        Why Musicians Need Trigonometry
+                                    </h4>
+                                    <ul class="feature-list" style="color: #7c2d12;">
+                                        <li>Sound waves are trigonometric functions</li>
+                                        <li>Harmony relationships follow trig patterns</li>
+                                        <li>Digital audio processing uses trig extensively</li>
+                                        <li>Synthesizer oscillators are trig functions</li>
+                                        <li>Acoustic analysis requires trig understanding</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="content-section" style="background: #fef2f2; border-color: #fecaca;">
+                                <h3 style="color: #991b1b;">Musical Connection: The Sine Wave</h3>
+                                <p style="color: #991b1b; margin-bottom: 1rem;">Every sound you hear—whether from a violin, piano, or human voice—can be broken down into <strong>sine waves</strong>. A sine wave is the purest form of sound, and it's described by a trigonometric function.</p>
+                                <div class="equation-box">
+                                    <div class="equation">y = A × sin(2πft + φ)</div>
+                                    <p style="color: #991b1b; font-size: 0.875rem;">This equation describes every pure tone in music!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ready to Begin?</h3>
+                            <p style="color: #6b7280; margin-top: 0.5rem;">Your journey into mathematical music starts here</p>
+                        </div>
+                        <div class="card-content">
+                            <p style="margin-bottom: 1rem;">Don't worry if mathematics feels intimidating—we'll take it step by step, always connecting abstract concepts to concrete musical examples. Remember, you already understand many of these concepts intuitively through your musical experience!</p>
+                            <button class="btn" onclick="showChapter('trig-1')">Start with Angles and the Unit Circle →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showChapter(chapterId) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.closest('.nav-button').classList.add('active');
+            
+            // Update content based on chapter
+            const content = document.getElementById('chapter-content');
+            
+            if (chapterId === 'trig-1') {
+                content.innerHTML = `
+                    <div class="alert">
+                        <div class="alert-title">
+                            <span class="icon">❓</span>
+                            How to Approach This Chapter
+                        </div>
+                        <p>We'll start with the unit circle—a circle with radius 1. This simple shape is the key to understanding all of trigonometry. Don't worry about memorizing everything at first; focus on understanding the patterns.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title" style="font-size: 1.5rem;">The Unit Circle: Foundation of Trigonometry</h2>
+                            <p style="color: #6b7280; margin-top: 0.5rem;">A circle with radius 1 centered at the origin - the key to understanding all trigonometric functions</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="content-section" style="background: #f0fdf4; border-color: #bbf7d0;">
+                                <h4 style="color: #166534; font-weight: 600; margin-bottom: 0.5rem;">What is the Unit Circle?</h4>
+                                <p style="color: #166534; font-size: 0.875rem; margin-bottom: 0.5rem;">The unit circle is simply a circle with radius 1, centered at the point (0,0) on a coordinate plane. It's called "unit" because the radius is 1 unit long.</p>
+                                <p style="color: #166534; font-size: 0.875rem;"><strong>Why is this important?</strong> Every point on this circle can be described using trigonometric functions, and every trigonometric function can be understood by looking at this circle.</p>
+                            </div>
+                            
+                            <div style="text-align: center; margin: 2rem 0;">
+                                <div style="width: 200px; height: 200px; border: 2px solid #6b7280; border-radius: 50%; margin: 0 auto; position: relative; background: #f9fafb;">
+                                    <div style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+                                    <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 0.75rem;">90°</div>
+                                    <div style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); font-size: 0.75rem;">270°</div>
+                                    <div style="position: absolute; left: -15px; top: 50%; transform: translateY(-50%); font-size: 0.75rem;">180°</div>
+                                    <div style="position: absolute; right: -10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem;">0°</div>
+                                </div>
+                                <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">Interactive unit circle visualization</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (chapterId === 'calc-intro') {
+                content.innerHTML = `
+                    <div class="alert">
+                        <div class="alert-title">
+                            <span class="icon">🧠</span>
+                            For Humanities Learners
+                        </div>
+                        <p>Calculus might seem abstract, but it's really about understanding change—something musicians know intimately through dynamics, tempo changes, and musical expression.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title" style="font-size: 1.5rem;">What is Calculus?</h2>
+                            <p style="color: #6b7280; margin-top: 0.5rem;">The mathematics of change and accumulation</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="content-section" style="background: #fffbeb; border-color: #fed7aa;">
+                                <h3 style="color: #92400e;">The Simple Definition</h3>
+                                <p style="color: #92400e; margin-bottom: 1rem;"><strong>Calculus</strong> is the mathematical study of <em>change</em> and <em>accumulation</em>. If algebra is about finding unknown numbers, calculus is about understanding how things change over time and how small changes add up to big effects.</p>
+                                <p style="color: #92400e;">Think of it as the mathematics that describes motion, growth, decay, and flow—all concepts that are fundamental to music and sound.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function showReference() {
+            alert('Math Symbols Reference would open here in the full application');
+        }
+        
+        function showProblemSolving() {
+            alert('Problem Solving Guide would open here in the full application');
+        }
+    </script>
+</body>
+</html>
