@@ -3,89 +3,71 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { CheckCircle, XCircle, Calculator, Music, HelpCircle } from "lucide-react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { CheckCircle, XCircle, Calculator, HelpCircle, Lightbulb } from "lucide-react"
 
 interface Exercise {
   id: string
+  type: "multiple-choice" | "short-answer" | "true-false" | "calculation"
   question: string
-  type: "multiple-choice" | "short-answer" | "true-false"
   options?: string[]
   correctAnswer: string | number
   explanation: string
+  hint?: string
   difficulty: "easy" | "medium" | "hard"
   musicalContext?: string
-  hint?: string
 }
 
 interface ExerciseCardProps {
   // New format
   exercise?: Exercise
   // Legacy format support
+  id?: string
+  type?: "multiple-choice" | "short-answer" | "true-false" | "calculation"
   question?: string
-  type?: "multiple-choice" | "short-answer" | "true-false"
   options?: string[]
   correctAnswer?: string | number
   explanation?: string
+  hint?: string
   difficulty?: "easy" | "medium" | "hard"
   musicalContext?: string
-  hint?: string
-  onComplete?: (correct: boolean) => void
+  onComplete?: (exerciseId: string, correct: boolean) => void
 }
 
 export function ExerciseCard({
   exercise,
+  id,
+  type,
   question,
-  type = "multiple-choice",
-  options = [],
+  options,
   correctAnswer,
   explanation,
-  difficulty = "medium",
-  musicalContext,
   hint,
+  difficulty,
+  musicalContext,
   onComplete,
 }: ExerciseCardProps) {
-  // Use exercise object if provided, otherwise use individual props
+  // Handle both new and legacy formats
   const exerciseData = exercise || {
-    id: Math.random().toString(),
-    question: question || "Sample question",
-    type,
-    options,
+    id: id || "unknown",
+    type: type || "multiple-choice",
+    question: question || "No question provided",
+    options: options || [],
     correctAnswer: correctAnswer || "",
     explanation: explanation || "No explanation provided",
-    difficulty,
-    musicalContext,
-    hint,
+    hint: hint,
+    difficulty: difficulty || "medium",
+    musicalContext: musicalContext,
   }
 
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
-  const [userAnswer, setUserAnswer] = useState<string>("")
   const [showResult, setShowResult] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
-
-  const handleSubmit = () => {
-    const answer = exerciseData.type === "short-answer" ? userAnswer : selectedAnswer
-    const correct = answer.toString().toLowerCase() === exerciseData.correctAnswer.toString().toLowerCase()
-
-    setIsCorrect(correct)
-    setShowResult(true)
-    onComplete?.(correct)
-  }
-
-  const handleReset = () => {
-    setSelectedAnswer("")
-    setUserAnswer("")
-    setShowResult(false)
-    setShowHint(false)
-    setIsCorrect(false)
-  }
-
-  const openCalculator = () => {
-    window.open("/calculator.html", "_blank", "width=400,height=600")
-  }
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
@@ -100,149 +82,193 @@ export function ExerciseCard({
     }
   }
 
+  const handleSubmit = () => {
+    const correct = selectedAnswer.toString().toLowerCase() === exerciseData.correctAnswer.toString().toLowerCase()
+    setIsCorrect(correct)
+    setShowResult(true)
+    onComplete?.(exerciseData.id, correct)
+  }
+
+  const handleReset = () => {
+    setSelectedAnswer("")
+    setShowResult(false)
+    setShowHint(false)
+    setIsCorrect(false)
+  }
+
+  const openCalculator = () => {
+    window.open("/calculator.html", "_blank", "width=400,height=600")
+  }
+
+  const renderQuestionInput = () => {
+    switch (exerciseData.type) {
+      case "multiple-choice":
+        return (
+          <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
+            {exerciseData.options?.map((option, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <RadioGroupItem value={option} id={`option-${index}`} />
+                <Label htmlFor={`option-${index}`} className="cursor-pointer">
+                  {option}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        )
+
+      case "true-false":
+        return (
+          <RadioGroup value={selectedAnswer} onValueChange={setSelectedAnswer}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="true" id="true" />
+              <Label htmlFor="true" className="cursor-pointer">
+                True
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="false" id="false" />
+              <Label htmlFor="false" className="cursor-pointer">
+                False
+              </Label>
+            </div>
+          </RadioGroup>
+        )
+
+      case "short-answer":
+        return (
+          <Input
+            value={selectedAnswer}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            placeholder="Enter your answer..."
+            className="w-full"
+          />
+        )
+
+      case "calculation":
+        return (
+          <div className="space-y-3">
+            <Textarea
+              value={selectedAnswer}
+              onChange={(e) => setSelectedAnswer(e.target.value)}
+              placeholder="Show your work and final answer..."
+              className="w-full min-h-[100px]"
+            />
+            <Button
+              onClick={openCalculator}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 bg-transparent"
+            >
+              <Calculator className="w-4 h-4" />
+              Open Calculator
+            </Button>
+          </div>
+        )
+
+      default:
+        return (
+          <Input
+            value={selectedAnswer}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            placeholder="Enter your answer..."
+            className="w-full"
+          />
+        )
+    }
+  }
+
   return (
     <Card className="w-full">
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <CardTitle className="text-lg">{exerciseData.question}</CardTitle>
-            {exerciseData.musicalContext && (
-              <CardDescription className="mt-2 flex items-center">
-                <Music className="w-4 h-4 mr-1" />
-                {exerciseData.musicalContext}
-              </CardDescription>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge className={getDifficultyColor(exerciseData.difficulty)}>{exerciseData.difficulty}</Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={openCalculator}
-              className="flex items-center gap-1 bg-transparent"
-            >
-              <Calculator className="w-4 h-4" />
-              Calculator
-            </Button>
-          </div>
+          <CardTitle className="text-lg">{exerciseData.question}</CardTitle>
+          <Badge className={getDifficultyColor(exerciseData.difficulty)} variant="secondary">
+            {exerciseData.difficulty}
+          </Badge>
         </div>
+        {exerciseData.musicalContext && (
+          <CardDescription className="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-400">
+            <strong>Musical Context:</strong> {exerciseData.musicalContext}
+          </CardDescription>
+        )}
       </CardHeader>
+
       <CardContent className="space-y-4">
         {!showResult && (
           <>
-            {exerciseData.type === "multiple-choice" && (
-              <div className="space-y-2">
-                {exerciseData.options?.map((option, index) => (
-                  <label
-                    key={index}
-                    className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+            {renderQuestionInput()}
+
+            <div className="flex items-center justify-between pt-4">
+              <div className="flex gap-2">
+                {exerciseData.hint && (
+                  <Button
+                    onClick={() => setShowHint(!showHint)}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
                   >
-                    <input
-                      type="radio"
-                      name="answer"
-                      value={option}
-                      checked={selectedAnswer === option}
-                      onChange={(e) => setSelectedAnswer(e.target.value)}
-                      className="text-blue-600"
-                    />
-                    <span>{option}</span>
-                  </label>
-                ))}
+                    <HelpCircle className="w-4 h-4" />
+                    {showHint ? "Hide Hint" : "Show Hint"}
+                  </Button>
+                )}
               </div>
-            )}
-
-            {exerciseData.type === "short-answer" && (
-              <div className="space-y-2">
-                <Input
-                  placeholder="Enter your answer..."
-                  value={userAnswer}
-                  onChange={(e) => setUserAnswer(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            )}
-
-            {exerciseData.type === "true-false" && (
-              <div className="flex gap-4">
-                <label className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                  <input
-                    type="radio"
-                    name="answer"
-                    value="true"
-                    checked={selectedAnswer === "true"}
-                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                    className="text-blue-600"
-                  />
-                  <span>True</span>
-                </label>
-                <label className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                  <input
-                    type="radio"
-                    name="answer"
-                    value="false"
-                    checked={selectedAnswer === "false"}
-                    onChange={(e) => setSelectedAnswer(e.target.value)}
-                    className="text-blue-600"
-                  />
-                  <span>False</span>
-                </label>
-              </div>
-            )}
-
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={handleSubmit}
-                disabled={
-                  (exerciseData.type === "short-answer" && !userAnswer.trim()) ||
-                  (exerciseData.type !== "short-answer" && !selectedAnswer)
-                }
-              >
+              <Button onClick={handleSubmit} disabled={!selectedAnswer.trim()} className="flex items-center gap-2">
                 Submit Answer
               </Button>
-
-              {exerciseData.hint && (
-                <Button variant="outline" onClick={() => setShowHint(!showHint)} className="flex items-center gap-1">
-                  <HelpCircle className="w-4 h-4" />
-                  {showHint ? "Hide Hint" : "Show Hint"}
-                </Button>
-              )}
             </div>
 
             {showHint && exerciseData.hint && (
-              <Alert>
-                <HelpCircle className="h-4 w-4" />
-                <AlertDescription>{exerciseData.hint}</AlertDescription>
-              </Alert>
+              <div className="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-400">
+                <div className="flex items-start gap-2">
+                  <Lightbulb className="w-4 h-4 text-yellow-600 mt-0.5" />
+                  <div>
+                    <strong className="text-yellow-800">Hint:</strong>
+                    <p className="text-yellow-700 mt-1">{exerciseData.hint}</p>
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}
 
         {showResult && (
           <div className="space-y-4">
-            <Alert className={isCorrect ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
-              <div className="flex items-center">
+            <div
+              className={`p-4 rounded-lg border-l-4 ${
+                isCorrect ? "bg-green-50 border-green-400" : "bg-red-50 border-red-400"
+              }`}
+            >
+              <div className="flex items-start gap-2">
                 {isCorrect ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-red-600" />
+                  <XCircle className="w-5 h-5 text-red-600 mt-0.5" />
                 )}
-                <AlertDescription className="ml-2">{isCorrect ? "Correct!" : "Incorrect"}</AlertDescription>
+                <div>
+                  <h4 className={`font-semibold ${isCorrect ? "text-green-800" : "text-red-800"}`}>
+                    {isCorrect ? "Correct!" : "Incorrect"}
+                  </h4>
+                  <p className={`mt-1 ${isCorrect ? "text-green-700" : "text-red-700"}`}>
+                    {isCorrect ? "Well done!" : `The correct answer is: ${exerciseData.correctAnswer}`}
+                  </p>
+                </div>
               </div>
-            </Alert>
-
-            <div className="p-4 bg-blue-50 rounded-lg">
-              <h4 className="font-semibold text-blue-900 mb-2">Explanation:</h4>
-              <p className="text-blue-800">{exerciseData.explanation}</p>
-              {!isCorrect && (
-                <p className="text-blue-700 mt-2">
-                  <strong>Correct answer:</strong> {exerciseData.correctAnswer}
-                </p>
-              )}
             </div>
 
-            <Button onClick={handleReset} variant="outline">
-              Try Again
-            </Button>
+            <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+              <h4 className="font-semibold text-blue-800 mb-2">Explanation:</h4>
+              <p className="text-blue-700">{exerciseData.explanation}</p>
+            </div>
+
+            <div className="flex justify-between">
+              <Button onClick={handleReset} variant="outline">
+                Try Again
+              </Button>
+              <Button onClick={openCalculator} variant="outline" className="flex items-center gap-2 bg-transparent">
+                <Calculator className="w-4 h-4" />
+                Calculator
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>

@@ -6,44 +6,16 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { ChevronLeft, ChevronRight, Menu, Home, BookOpen, Calculator, Music, CheckCircle } from "lucide-react"
-
-interface Chapter {
-  id: string
-  title: string
-  description: string
-  difficulty: string
-  duration: string
-  topics: string[]
-  prerequisites?: string[]
-}
-
-interface CourseSection {
-  title: string
-  description: string
-  chapters: Chapter[]
-}
-
-interface CourseData {
-  trigonometry: CourseSection
-  calculus: CourseSection
-}
+import { ChevronLeft, ChevronRight, Menu, Home, BookOpen, Calculator, Music } from "lucide-react"
+import { courseData } from "@/data/course-data"
 
 interface ChapterNavigationBarProps {
   currentChapterId: string
-  courseData: CourseData
-  completedChapters: string[]
-  onChapterSelect: (chapterId: string) => void
-  onHome: () => void
+  onNavigate: (chapterId: string) => void
+  onBackToTOC: () => void
 }
 
-export function ChapterNavigationBar({
-  currentChapterId,
-  courseData,
-  completedChapters,
-  onChapterSelect,
-  onHome,
-}: ChapterNavigationBarProps) {
+export function ChapterNavigationBar({ currentChapterId, onNavigate, onBackToTOC }: ChapterNavigationBarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const allChapters = [...courseData.trigonometry.chapters, ...courseData.calculus.chapters]
@@ -53,8 +25,7 @@ export function ChapterNavigationBar({
   const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null
 
   const totalChapters = allChapters.length
-  const completedCount = completedChapters.length
-  const progressPercentage = (completedCount / totalChapters) * 100
+  const progressPercentage = ((currentIndex + 1) / totalChapters) * 100
 
   const isTrigChapter = courseData.trigonometry.chapters.some((ch) => ch.id === currentChapterId)
   const sectionColor = isTrigChapter ? "blue" : "orange"
@@ -81,7 +52,7 @@ export function ChapterNavigationBar({
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium">Course Progress</span>
           <span className="text-gray-600">
-            {completedCount}/{totalChapters} chapters
+            {currentIndex + 1}/{totalChapters} chapters
           </span>
         </div>
         <Progress value={progressPercentage} className="h-2" />
@@ -99,7 +70,7 @@ export function ChapterNavigationBar({
             <button
               key={chapter.id}
               onClick={() => {
-                onChapterSelect(chapter.id)
+                onNavigate(chapter.id)
                 setIsOpen(false)
               }}
               className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
@@ -111,7 +82,6 @@ export function ChapterNavigationBar({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500 w-8">Ch {index + 1}</span>
-                  {completedChapters.includes(chapter.id) && <CheckCircle className="w-3 h-3 text-green-600" />}
                   <span className="truncate">{chapter.title}</span>
                 </div>
               </div>
@@ -131,7 +101,7 @@ export function ChapterNavigationBar({
             <button
               key={chapter.id}
               onClick={() => {
-                onChapterSelect(chapter.id)
+                onNavigate(chapter.id)
                 setIsOpen(false)
               }}
               className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
@@ -145,7 +115,6 @@ export function ChapterNavigationBar({
                   <span className="text-xs text-gray-500 w-8">
                     Ch {courseData.trigonometry.chapters.length + index + 1}
                   </span>
-                  {completedChapters.includes(chapter.id) && <CheckCircle className="w-3 h-3 text-green-600" />}
                   <span className="truncate">{chapter.title}</span>
                 </div>
               </div>
@@ -162,7 +131,7 @@ export function ChapterNavigationBar({
         <div className="flex items-center justify-between h-16">
           {/* Left side - Home and navigation */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={onHome} className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={onBackToTOC} className="flex items-center gap-2">
               <Home className="w-4 h-4" />
               <span className="hidden sm:inline">Home</span>
             </Button>
@@ -217,7 +186,7 @@ export function ChapterNavigationBar({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => previousChapter && onChapterSelect(previousChapter.id)}
+              onClick={() => previousChapter && onNavigate(previousChapter.id)}
               disabled={!previousChapter}
               className="flex items-center gap-1"
             >
@@ -227,7 +196,7 @@ export function ChapterNavigationBar({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => nextChapter && onChapterSelect(nextChapter.id)}
+              onClick={() => nextChapter && onNavigate(nextChapter.id)}
               disabled={!nextChapter}
               className="flex items-center gap-1"
             >
