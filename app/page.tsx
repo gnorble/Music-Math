@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Music, Calculator, BookOpen, Play, Clock, Users, Star } from "lucide-react"
+import { Music, Calculator, BookOpen, Play, Clock, Users, Star, Award, Target, TrendingUp } from "lucide-react"
 import { TableOfContents } from "@/components/table-of-contents"
 import { ChapterContent } from "@/components/chapter-content"
 import { courseData } from "@/data/course-data"
@@ -37,6 +37,9 @@ export default function MathMusicCourse() {
 
   const totalChapters = courseData.trigonometry.chapters.length + courseData.calculus.chapters.length
   const progressPercentage = (completedChapters.length / totalChapters) * 100
+
+  // Get current chapter info for navigation testing
+  const allChapters = [...courseData.trigonometry.chapters, ...courseData.calculus.chapters]
 
   if (currentView === "chapter") {
     return (
@@ -88,7 +91,7 @@ export default function MathMusicCourse() {
             <Card className="text-center">
               <CardContent className="pt-4 pb-4">
                 <Clock className="w-6 h-6 text-green-600 mx-auto mb-1" />
-                <div className="text-xl font-bold text-gray-900">~8</div>
+                <div className="text-xl font-bold text-gray-900">~12</div>
                 <div className="text-xs text-gray-600">Hours</div>
               </CardContent>
             </Card>
@@ -108,6 +111,72 @@ export default function MathMusicCourse() {
             </Card>
           </div>
         </div>
+
+        {/* Navigation Test Panel (only show if we have progress) */}
+        {completedChapters.length > 0 && (
+          <Card className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="flex items-center text-green-900">
+                <TrendingUp className="w-5 h-5 mr-2" />
+                Navigation Test Panel
+              </CardTitle>
+              <CardDescription className="text-green-700">Test smooth progression through all chapters</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-sm">Quick Chapter Access:</h4>
+                  <div className="space-y-1 max-h-32 overflow-y-auto">
+                    {allChapters.slice(0, 5).map((chapter, index) => (
+                      <Button
+                        key={chapter.id}
+                        onClick={() => handleChapterSelect(chapter.id)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start text-xs"
+                      >
+                        {index + 1}. {chapter.title}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-sm">Calculus Chapters:</h4>
+                  <div className="space-y-1 max-h-32 overflow-y-auto">
+                    {courseData.calculus.chapters.slice(0, 4).map((chapter, index) => (
+                      <Button
+                        key={chapter.id}
+                        onClick={() => handleChapterSelect(chapter.id)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start text-xs"
+                      >
+                        {courseData.trigonometry.chapters.length + index + 1}. {chapter.title}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-sm">Progress Stats:</h4>
+                  <div className="text-sm space-y-1">
+                    <div>
+                      Completed: {completedChapters.length}/{totalChapters}
+                    </div>
+                    <div>Progress: {Math.round(progressPercentage)}%</div>
+                    <div>
+                      Trig: {courseData.trigonometry.chapters.filter((ch) => completedChapters.includes(ch.id)).length}/
+                      {courseData.trigonometry.chapters.length}
+                    </div>
+                    <div>
+                      Calc: {courseData.calculus.chapters.filter((ch) => completedChapters.includes(ch.id)).length}/
+                      {courseData.calculus.chapters.length}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Table of Contents */}
         <TableOfContents
@@ -167,6 +236,40 @@ export default function MathMusicCourse() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Achievement System Preview */}
+        {completedChapters.length >= 3 && (
+          <Card className="mt-8 bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+            <CardHeader>
+              <CardTitle className="flex items-center text-yellow-900">
+                <Award className="w-5 h-5 mr-2" />
+                Achievements Unlocked
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                {completedChapters.length >= 1 && (
+                  <div className="flex items-center space-x-2">
+                    <Award className="w-5 h-5 text-yellow-600" />
+                    <span className="text-sm">First Steps</span>
+                  </div>
+                )}
+                {completedChapters.length >= 3 && (
+                  <div className="flex items-center space-x-2">
+                    <Target className="w-5 h-5 text-blue-600" />
+                    <span className="text-sm">Getting Started</span>
+                  </div>
+                )}
+                {completedChapters.length >= 7 && (
+                  <div className="flex items-center space-x-2">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Making Progress</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )

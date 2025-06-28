@@ -10,6 +10,13 @@ import { TrigInverse } from "@/chapters/trig-inverse"
 import { TrigEquations } from "@/chapters/trig-equations"
 import { MusicTheoryApplications } from "@/chapters/music-theory-applications"
 import CalcIntro from "@/chapters/calc-intro"
+import CalcLimits from "@/chapters/calc-limits"
+import CalcDerivatives from "@/chapters/calc-derivatives"
+import CalcDerivativeRules from "@/chapters/calc-derivative-rules"
+import CalcDerivativeApps from "@/chapters/calc-derivative-apps"
+import CalcIntegrals from "@/chapters/calc-integrals"
+import CalcIntegrationTechniques from "@/chapters/calc-integration-techniques"
+import CalcApplications from "@/chapters/calc-applications"
 import { courseData } from "@/data/course-data"
 
 interface ChapterContentProps {
@@ -64,6 +71,20 @@ export function ChapterContent({ chapterId, onBack, onNavigate, onComplete, isCo
         return <MusicTheoryApplications onComplete={handleChapterComplete} />
       case "calc-intro":
         return <CalcIntro onComplete={handleChapterComplete} />
+      case "calc-limits":
+        return <CalcLimits onComplete={handleChapterComplete} />
+      case "calc-derivatives":
+        return <CalcDerivatives onComplete={handleChapterComplete} />
+      case "calc-derivative-rules":
+        return <CalcDerivativeRules onComplete={handleChapterComplete} />
+      case "calc-derivative-apps":
+        return <CalcDerivativeApps onComplete={handleChapterComplete} />
+      case "calc-integrals":
+        return <CalcIntegrals onComplete={handleChapterComplete} />
+      case "calc-integration-techniques":
+        return <CalcIntegrationTechniques onComplete={handleChapterComplete} />
+      case "calc-applications":
+        return <CalcApplications onComplete={handleChapterComplete} />
       default:
         return (
           <div className="flex items-center justify-center min-h-[400px]">
