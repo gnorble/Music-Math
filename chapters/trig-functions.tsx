@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, Waves, Calculator, Lightbulb } from "lucide-react"
 import { ExerciseCard } from "@/components/exercise-card"
+import { TopicResourcesBar } from "@/components/topic-resources-bar"
 
 interface TrigFunctionsProps {
   onComplete: () => void
@@ -102,6 +103,9 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      {/* Topic Resources Bar */}
+      <TopicResourcesBar chapterId="trig-functions" />
+
       {/* Introduction */}
       <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
         <CardHeader>
@@ -367,25 +371,52 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
 
                 <div className="bg-blue-50 p-6 rounded-lg">
                   <h4 className="font-semibold text-xl text-blue-900 mb-3">Reciprocal Identities</h4>
+
+                  {/* Definition Box for Reciprocal Functions */}
+                  <div className="bg-blue-100 p-4 rounded-lg mb-4 border-l-4 border-blue-500">
+                    <h5 className="font-semibold text-blue-900 mb-2">📚 What are Reciprocal Functions?</h5>
+                    <p className="text-blue-800 text-sm mb-3">
+                      The reciprocal trigonometric functions are the "flipped" versions of sine, cosine, and tangent.
+                      Just like how 1/2 is the reciprocal of 2, these functions are 1 divided by the basic trig
+                      functions:
+                    </p>
+                    <div className="space-y-2 text-sm">
+                      <div className="bg-white p-2 rounded">
+                        <strong>Cosecant (csc):</strong> The reciprocal of sine - "co-secant" means "complement of
+                        secant"
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <strong>Secant (sec):</strong> The reciprocal of cosine - from Latin "secare" meaning "to cut"
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <strong>Cotangent (cot):</strong> The reciprocal of tangent - "co-tangent" means "complement of
+                        tangent"
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="bg-white p-3 rounded border mb-3">
                     <div className="space-y-1 text-center">
                       <div>
-                        <code>csc(θ) = 1/sin(θ)</code>
+                        <code>csc(θ) = 1/sin(θ)</code> <span className="text-sm text-gray-600">(cosecant)</span>
                       </div>
                       <div>
-                        <code>sec(θ) = 1/cos(θ)</code>
+                        <code>sec(θ) = 1/cos(θ)</code> <span className="text-sm text-gray-600">(secant)</span>
                       </div>
                       <div>
-                        <code>cot(θ) = 1/tan(θ) = cos(θ)/sin(θ)</code>
+                        <code>cot(θ) = 1/tan(θ) = cos(θ)/sin(θ)</code>{" "}
+                        <span className="text-sm text-gray-600">(cotangent)</span>
                       </div>
                     </div>
                   </div>
                   <p className="text-blue-800 mb-3">
-                    These define the reciprocal functions: cosecant, secant, and cotangent.
+                    These define the reciprocal functions: cosecant (csc), secant (sec), and cotangent (cot). They're
+                    undefined when their corresponding basic function equals zero.
                   </p>
                   <div className="bg-blue-100 p-3 rounded">
                     <strong>Musical Application:</strong> Less common in basic audio work, but appear in advanced filter
-                    design and mathematical analysis of audio systems.
+                    design and mathematical analysis of audio systems. For example, sec(θ) appears in certain reverb
+                    algorithms.
                   </div>
                 </div>
 

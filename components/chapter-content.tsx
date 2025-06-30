@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { ChapterNavigationBar } from "@/components/chapter-navigation-bar"
+import { TopicResourcesBar } from "@/components/topic-resources-bar"
 import TrigIntro from "@/chapters/trig-intro"
 import TrigUnitCircle from "@/chapters/trig-unit-circle"
 import TrigFunctions from "@/chapters/trig-functions"
@@ -104,9 +105,9 @@ export function ChapterContent({ chapterId, onBack, onNavigate, onComplete, isCo
     <div className="min-h-screen bg-gray-50">
       <ChapterNavigationBar currentChapterId={chapterId} onNavigate={onNavigate} onBackToTOC={onBack} />
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 py-6">
         {showCompletionDelay && nextChapter && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-r-lg">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -126,7 +127,10 @@ export function ChapterContent({ chapterId, onBack, onNavigate, onComplete, isCo
           </div>
         )}
 
-        <main className="py-8">{renderChapterContent()}</main>
+        {/* Topic Resources Bar */}
+        <TopicResourcesBar chapterId={chapterId} />
+
+        <main>{renderChapterContent()}</main>
       </div>
     </div>
   )

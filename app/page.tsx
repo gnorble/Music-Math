@@ -10,29 +10,29 @@ import { ChapterContent } from "@/components/chapter-content"
 import { courseData } from "@/data/course-data"
 
 export default function MathMusicCourse() {
-  const [currentView, setCurrentView] = useState("toc")
-  const [currentChapter, setCurrentChapter] = useState("")
+  const [currentView, setCurrentView] = useState<"toc" | "chapter">("toc")
+  const [currentChapterId, setCurrentChapterId] = useState<string>("")
   const [completedChapters, setCompletedChapters] = useState<string[]>([])
 
   const handleChapterSelect = (chapterId: string) => {
-    setCurrentChapter(chapterId)
+    setCurrentChapterId(chapterId)
     setCurrentView("chapter")
   }
 
   const handleBackToTOC = () => {
     setCurrentView("toc")
-    setCurrentChapter("")
+    setCurrentChapterId("")
+  }
+
+  const handleChapterComplete = () => {
+    if (currentChapterId && !completedChapters.includes(currentChapterId)) {
+      setCompletedChapters([...completedChapters, currentChapterId])
+    }
   }
 
   const handleNavigateToChapter = (chapterId: string) => {
-    setCurrentChapter(chapterId)
+    setCurrentChapterId(chapterId)
     setCurrentView("chapter")
-  }
-
-  const markChapterComplete = (chapterId: string) => {
-    if (!completedChapters.includes(chapterId)) {
-      setCompletedChapters([...completedChapters, chapterId])
-    }
   }
 
   const totalChapters = courseData.trigonometry.chapters.length + courseData.calculus.chapters.length
@@ -41,14 +41,14 @@ export default function MathMusicCourse() {
   // Get current chapter info for navigation testing
   const allChapters = [...courseData.trigonometry.chapters, ...courseData.calculus.chapters]
 
-  if (currentView === "chapter") {
+  if (currentView === "chapter" && currentChapterId) {
     return (
       <ChapterContent
-        chapterId={currentChapter}
+        chapterId={currentChapterId}
         onBack={handleBackToTOC}
         onNavigate={handleNavigateToChapter}
-        onComplete={() => markChapterComplete(currentChapter)}
-        isCompleted={completedChapters.includes(currentChapter)}
+        onComplete={handleChapterComplete}
+        isCompleted={completedChapters.includes(currentChapterId)}
       />
     )
   }

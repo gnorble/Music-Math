@@ -1,38 +1,42 @@
 "use client"
 
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Clock, BookOpen, CheckCircle, Play } from "lucide-react"
-
-interface Chapter {
-  id: string
-  title: string
-  description: string
-  difficulty: string
-  duration: string
-  topics: string[]
-  prerequisites?: string[]
-}
-
-interface CourseSection {
-  title: string
-  description: string
-  chapters: Chapter[]
-}
-
-interface CourseData {
-  trigonometry: CourseSection
-  calculus: CourseSection
-}
+import { Separator } from "@/components/ui/separator"
+import {
+  Calculator,
+  Music,
+  Clock,
+  CheckCircle,
+  BookOpen,
+  Headphones,
+  Settings,
+  ArrowRight,
+  Star,
+  Trophy,
+  Target,
+} from "lucide-react"
+import { courseData } from "@/data/course-data"
 
 interface TableOfContentsProps {
-  courseData: CourseData
   onChapterSelect: (chapterId: string) => void
   completedChapters: string[]
 }
 
-export function TableOfContents({ courseData, onChapterSelect, completedChapters }: TableOfContentsProps) {
+export function TableOfContents({ onChapterSelect, completedChapters }: TableOfContentsProps) {
+  const [selectedSection, setSelectedSection] = useState<"trigonometry" | "calculus" | "resources">("trigonometry")
+
+  const trigCompletedCount = courseData.trigonometry.chapters.filter((ch) => completedChapters.includes(ch.id)).length
+
+  const calcCompletedCount = courseData.calculus.chapters.filter((ch) => completedChapters.includes(ch.id)).length
+
+  const totalChapters = courseData.trigonometry.chapters.length + courseData.calculus.chapters.length
+  const totalCompleted = completedChapters.length
+  const overallProgress = (totalCompleted / totalChapters) * 100
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
       case "introduction":
@@ -48,79 +52,54 @@ export function TableOfContents({ courseData, onChapterSelect, completedChapters
     }
   }
 
-  const getCompletionPercentage = (chapters: Chapter[]) => {
-    const completed = chapters.filter((ch) => completedChapters.includes(ch.id)).length
-    return (completed / chapters.length) * 100
-  }
-
-  const ChapterCard = ({
-    chapter,
-    index,
-    sectionOffset = 0,
-  }: { chapter: Chapter; index: number; sectionOffset?: number }) => {
+  const ChapterCard = ({ chapter, index, sectionLength }: { chapter: any; index: number; sectionLength: number }) => {
     const isCompleted = completedChapters.includes(chapter.id)
-    const chapterNumber = sectionOffset + index + 1
 
     return (
       <Card
-        className="cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] group"
+        className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] ${
+          isCompleted ? "ring-2 ring-green-200 bg-green-50" : "hover:bg-gray-50"
+        }`}
         onClick={() => onChapterSelect(chapter.id)}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
-                {chapterNumber}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="text-xs">
+                  Chapter {index + 1}
+                </Badge>
+                <Badge className={getDifficultyColor(chapter.difficulty)} variant="secondary">
+                  {chapter.difficulty}
+                </Badge>
+                {isCompleted && <CheckCircle className="w-4 h-4 text-green-600" />}
               </div>
-              {isCompleted && <CheckCircle className="w-5 h-5 text-green-600" />}
+              <CardTitle className="text-lg leading-tight">{chapter.title}</CardTitle>
             </div>
-            <Badge className={getDifficultyColor(chapter.difficulty)} variant="secondary">
-              {chapter.difficulty}
-            </Badge>
+            <ArrowRight className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" />
           </div>
-          <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">{chapter.title}</CardTitle>
           <CardDescription className="text-sm">{chapter.description}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <div className="space-y-3">
-            {/* Duration */}
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Clock className="w-4 h-4" />
-              <span>{chapter.duration}</span>
-            </div>
-
-            {/* Topics */}
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-gray-700">Topics covered:</div>
-              <div className="flex flex-wrap gap-1">
-                {chapter.topics.map((topic, topicIndex) => (
-                  <Badge key={topicIndex} variant="outline" className="text-xs">
-                    {topic}
-                  </Badge>
-                ))}
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>{chapter.duration}</span>
               </div>
             </div>
 
-            {/* Prerequisites (if any) */}
-            {chapter.prerequisites && chapter.prerequisites.length > 0 && (
-              <div className="text-xs text-gray-500">
-                <span className="font-medium">Recommended prerequisites:</span> {chapter.prerequisites.join(", ")}
-              </div>
-            )}
-
-            {/* Action button */}
-            <div className="pt-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Play className="w-4 h-4" />
-                  <span>{isCompleted ? "Review Chapter" : "Start Chapter"}</span>
-                </div>
-                {isCompleted && (
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Completed
-                  </Badge>
-                )}
-              </div>
+            <div className="flex flex-wrap gap-1">
+              {chapter.topics.slice(0, 3).map((topic: string, topicIndex: number) => (
+                <Badge key={topicIndex} variant="outline" className="text-xs">
+                  {topic}
+                </Badge>
+              ))}
+              {chapter.topics.length > 3 && (
+                <Badge variant="outline" className="text-xs">
+                  +{chapter.topics.length - 3} more
+                </Badge>
+              )}
             </div>
           </div>
         </CardContent>
@@ -128,71 +107,213 @@ export function TableOfContents({ courseData, onChapterSelect, completedChapters
     )
   }
 
+  const ResourceCard = ({ resource }: { resource: any }) => {
+    const getResourceIcon = (type: string) => {
+      switch (type.toLowerCase()) {
+        case "reference":
+          return BookOpen
+        case "guide":
+          return Target
+        case "interactive":
+          return Headphones
+        case "tool":
+          return Settings
+        case "calculator":
+          return Calculator
+        case "exercises":
+          return Trophy
+        default:
+          return BookOpen
+      }
+    }
+
+    const IconComponent = getResourceIcon(resource.type)
+
+    return (
+      <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:bg-gray-50">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <IconComponent className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">{resource.title}</CardTitle>
+                <Badge variant="secondary" className="mt-1">
+                  {resource.type}
+                </Badge>
+              </div>
+            </div>
+            <ArrowRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <CardDescription>{resource.description}</CardDescription>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
-    <div className="space-y-8">
-      {/* Trigonometry Section */}
-      <div>
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <BookOpen className="w-6 h-6 text-blue-600" />
-              {courseData.trigonometry.title}
-            </h2>
-            <div className="text-sm text-gray-600">
-              {courseData.trigonometry.chapters.filter((ch) => completedChapters.includes(ch.id)).length}/
-              {courseData.trigonometry.chapters.length} completed
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Interactive Mathematics for Musicians</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Master trigonometry and calculus through the lens of music and audio engineering
+          </p>
+
+          {/* Overall Progress */}
+          <div className="mt-6 max-w-md mx-auto">
+            <div className="flex items-center justify-between text-sm mb-2">
+              <span className="font-medium">Overall Progress</span>
+              <span className="text-gray-600">
+                {totalCompleted}/{totalChapters} chapters
+              </span>
             </div>
-          </div>
-          <p className="text-gray-600 mb-4">{courseData.trigonometry.description}</p>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Section Progress</span>
-              <span>{Math.round(getCompletionPercentage(courseData.trigonometry.chapters))}%</span>
-            </div>
-            <Progress value={getCompletionPercentage(courseData.trigonometry.chapters)} className="h-2" />
+            <Progress value={overallProgress} className="h-3" />
+            <div className="text-xs text-gray-500 mt-1 text-center">{Math.round(overallProgress)}% complete</div>
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {courseData.trigonometry.chapters.map((chapter, index) => (
-            <ChapterCard key={chapter.id} chapter={chapter} index={index} />
-          ))}
+        {/* Section Navigation */}
+        <div className="flex justify-center mb-8">
+          <div className="flex bg-white rounded-lg p-1 shadow-sm border">
+            <Button
+              variant={selectedSection === "trigonometry" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setSelectedSection("trigonometry")}
+              className="flex items-center gap-2"
+            >
+              <Calculator className="w-4 h-4" />
+              Trigonometry
+              <Badge variant="secondary" className="ml-1">
+                {trigCompletedCount}/{courseData.trigonometry.chapters.length}
+              </Badge>
+            </Button>
+            <Button
+              variant={selectedSection === "calculus" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setSelectedSection("calculus")}
+              className="flex items-center gap-2"
+            >
+              <Music className="w-4 h-4" />
+              Calculus
+              <Badge variant="secondary" className="ml-1">
+                {calcCompletedCount}/{courseData.calculus.chapters.length}
+              </Badge>
+            </Button>
+            <Button
+              variant={selectedSection === "resources" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setSelectedSection("resources")}
+              className="flex items-center gap-2"
+            >
+              <BookOpen className="w-4 h-4" />
+              Resources
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Calculus Section */}
-      <div>
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <BookOpen className="w-6 h-6 text-orange-600" />
-              {courseData.calculus.title}
-            </h2>
-            <div className="text-sm text-gray-600">
-              {courseData.calculus.chapters.filter((ch) => completedChapters.includes(ch.id)).length}/
-              {courseData.calculus.chapters.length} completed
+        {/* Content Sections */}
+        {selectedSection === "trigonometry" && (
+          <div>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-blue-900 mb-2">{courseData.trigonometry.title}</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">{courseData.trigonometry.description}</p>
+              <div className="mt-4">
+                <Progress
+                  value={(trigCompletedCount / courseData.trigonometry.chapters.length) * 100}
+                  className="h-2 max-w-md mx-auto"
+                />
+                <div className="text-sm text-gray-500 mt-1">
+                  {trigCompletedCount} of {courseData.trigonometry.chapters.length} chapters completed
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courseData.trigonometry.chapters.map((chapter, index) => (
+                <ChapterCard
+                  key={chapter.id}
+                  chapter={chapter}
+                  index={index}
+                  sectionLength={courseData.trigonometry.chapters.length}
+                />
+              ))}
             </div>
           </div>
-          <p className="text-gray-600 mb-4">{courseData.calculus.description}</p>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Section Progress</span>
-              <span>{Math.round(getCompletionPercentage(courseData.calculus.chapters))}%</span>
-            </div>
-            <Progress value={getCompletionPercentage(courseData.calculus.chapters)} className="h-2" />
-          </div>
-        </div>
+        )}
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {courseData.calculus.chapters.map((chapter, index) => (
-            <ChapterCard
-              key={chapter.id}
-              chapter={chapter}
-              index={index}
-              sectionOffset={courseData.trigonometry.chapters.length}
-            />
-          ))}
-        </div>
+        {selectedSection === "calculus" && (
+          <div>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-orange-900 mb-2">{courseData.calculus.title}</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">{courseData.calculus.description}</p>
+              <div className="mt-4">
+                <Progress
+                  value={(calcCompletedCount / courseData.calculus.chapters.length) * 100}
+                  className="h-2 max-w-md mx-auto"
+                />
+                <div className="text-sm text-gray-500 mt-1">
+                  {calcCompletedCount} of {courseData.calculus.chapters.length} chapters completed
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courseData.calculus.chapters.map((chapter, index) => (
+                <ChapterCard
+                  key={chapter.id}
+                  chapter={chapter}
+                  index={courseData.trigonometry.chapters.length + index}
+                  sectionLength={courseData.calculus.chapters.length}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {selectedSection === "resources" && (
+          <div>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{courseData.resources.title}</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Additional tools, references, and interactive content to enhance your learning
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courseData.resources.items.map((resource) => (
+                <ResourceCard key={resource.id} resource={resource} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Achievement Section */}
+        {totalCompleted > 0 && (
+          <div className="mt-12 text-center">
+            <Separator className="mb-6" />
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Star className="w-5 h-5 text-yellow-500" />
+              <h3 className="text-lg font-semibold">Your Progress</h3>
+              <Star className="w-5 h-5 text-yellow-500" />
+            </div>
+            <div className="flex justify-center gap-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{trigCompletedCount}</div>
+                <div className="text-sm text-gray-600">Trigonometry</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600">{calcCompletedCount}</div>
+                <div className="text-sm text-gray-600">Calculus</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{totalCompleted}</div>
+                <div className="text-sm text-gray-600">Total Chapters</div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
