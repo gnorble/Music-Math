@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, Waves, Calculator, Lightbulb } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { TrendingUp, Waves, Calculator, Lightbulb, BookOpen, Target } from "lucide-react"
 import { ExerciseCard } from "@/components/exercise-card"
 import { TopicResourcesBar } from "@/components/topic-resources-bar"
 
@@ -29,75 +30,69 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
 
   const exercises = [
     {
-      id: "special-angles",
+      id: "special-angles-1",
       question: "What is sin(30°)?",
       type: "multiple-choice" as const,
       options: ["1/2", "√2/2", "√3/2", "1"],
-      correctAnswer: 0,
+      correctAnswer: "1/2",
       explanation:
-        "sin(30°) = 1/2. This is one of the fundamental special angle values that appears frequently in music and audio processing.",
+        "sin(30°) = 1/2. This is one of the fundamental special angle values. In a 30-60-90 triangle, the side opposite to 30° is half the length of the hypotenuse.",
       hint: "Think about the 30-60-90 triangle. The side opposite to 30° is half the hypotenuse.",
       musicalContext:
         "30° phase shifts are sometimes used in stereo widening effects to create subtle spatial enhancement without causing phase cancellation.",
+      difficulty: "easy" as const,
     },
     {
-      id: "pythagorean-identity",
+      id: "pythagorean-identity-1",
       question: "If sin(θ) = 3/5, what is cos(θ)? (assuming θ is in the first quadrant)",
       type: "multiple-choice" as const,
       options: ["3/5", "4/5", "5/3", "5/4"],
-      correctAnswer: 1,
+      correctAnswer: "4/5",
       explanation:
-        "Using the Pythagorean identity: sin²(θ) + cos²(θ) = 1. If sin(θ) = 3/5, then cos²(θ) = 1 - (3/5)² = 1 - 9/25 = 16/25, so cos(θ) = 4/5.",
+        "Using the Pythagorean identity: sin²(θ) + cos²(θ) = 1. If sin(θ) = 3/5, then cos²(θ) = 1 - (3/5)² = 1 - 9/25 = 16/25, so cos(θ) = 4/5 (positive in first quadrant).",
       hint: "Use the fundamental identity: sin²(θ) + cos²(θ) = 1",
       musicalContext:
         "This relationship ensures that the total 'energy' of a sine wave remains constant as it oscillates, which is crucial for maintaining consistent audio levels.",
+      difficulty: "medium" as const,
     },
     {
-      id: "tangent-calculation",
+      id: "tangent-calculation-1",
       question: "What is tan(45°)?",
       type: "multiple-choice" as const,
       options: ["0", "1/2", "1", "√2"],
-      correctAnswer: 2,
+      correctAnswer: "1",
       explanation:
         "tan(45°) = 1. At 45°, sine and cosine are equal (both √2/2), so tan(45°) = sin(45°)/cos(45°) = (√2/2)/(√2/2) = 1.",
       hint: "At 45°, we're exactly halfway between horizontal and vertical. What's the slope of a 45° line?",
       musicalContext:
         "A 45° angle represents equal horizontal and vertical components, often used in stereo panning algorithms for balanced left-right distribution.",
+      difficulty: "easy" as const,
     },
     {
-      id: "stereo-panning",
-      question:
-        "In stereo panning, if the left channel amplitude is cos(θ) and right channel is sin(θ), what happens at θ = 45°?",
+      id: "reciprocal-function-1",
+      question: "What is csc(60°)?",
       type: "multiple-choice" as const,
-      options: [
-        "Sound is fully left",
-        "Sound is fully right",
-        "Sound is equally balanced between left and right",
-        "Sound is muted",
-      ],
-      correctAnswer: 2,
+      options: ["1/2", "√3/2", "2/√3", "2"],
+      correctAnswer: "2/√3",
       explanation:
-        "At θ = 45°, cos(45°) = sin(45°) = √2/2 ≈ 0.707. Both channels receive equal amplitude, creating a perfectly centered stereo image.",
-      hint: "What happens when cos(θ) and sin(θ) are equal?",
+        "csc(60°) = 1/sin(60°). Since sin(60°) = √3/2, we have csc(60°) = 1/(√3/2) = 2/√3. We can rationalize this as 2√3/3.",
+      hint: "Remember that csc(θ) = 1/sin(θ). First find sin(60°), then take its reciprocal.",
       musicalContext:
-        "This is the mathematical basis for constant-power panning, ensuring that the perceived loudness remains constant as sound moves across the stereo field.",
+        "Reciprocal functions appear in advanced audio filter design, particularly in calculating response curves.",
+      difficulty: "medium" as const,
     },
     {
-      id: "circular-motion",
-      question: "A point moving in a circle has position (cos(ωt), sin(ωt)). What does ω represent?",
+      id: "sum-identity-1",
+      question: "Using the sum identity, what is sin(75°)?",
       type: "multiple-choice" as const,
-      options: [
-        "The radius of the circle",
-        "The angular frequency (speed of rotation)",
-        "The amplitude of motion",
-        "The phase offset",
-      ],
-      correctAnswer: 1,
+      options: ["(√6 + √2)/4", "(√6 - √2)/4", "(√3 + 1)/2", "(√3 - 1)/2"],
+      correctAnswer: "(√6 + √2)/4",
       explanation:
-        "ω (omega) represents angular frequency - how fast the point rotates around the circle. In audio, this directly corresponds to the frequency of a sound wave.",
-      hint: "Think about what makes the point move faster or slower around the circle.",
+        "sin(75°) = sin(45° + 30°) = sin(45°)cos(30°) + cos(45°)sin(30°) = (√2/2)(√3/2) + (√2/2)(1/2) = √6/4 + √2/4 = (√6 + √2)/4.",
+      hint: "Use sin(A + B) = sin(A)cos(B) + cos(A)sin(B). Try 75° = 45° + 30°.",
       musicalContext:
-        "In audio synthesis, ω determines the pitch of oscillators. Higher ω values create higher frequencies and thus higher pitches.",
+        "Sum identities are used in frequency modulation synthesis to calculate the spectrum of complex waveforms.",
+      difficulty: "hard" as const,
     },
   ]
 
@@ -346,99 +341,154 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
           <Card>
             <CardHeader>
               <CardTitle>Fundamental Identities</CardTitle>
+              <CardDescription>
+                Essential relationships that are always true - the mathematical tools for simplifying and solving
+                trigonometric problems
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <p className="text-lg leading-relaxed">
-                Trigonometric identities are equations that are always true. They're essential tools for simplifying
-                expressions and solving problems in audio processing.
+                Trigonometric identities are equations that are always true, regardless of the angle value. They're like
+                mathematical shortcuts that help us solve complex problems and understand deeper relationships.
               </p>
 
-              <div className="space-y-6">
-                <div className="bg-red-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-xl text-red-900 mb-3">Pythagorean Identity</h4>
-                  <div className="bg-white p-3 rounded border mb-3 text-center">
+              <div className="space-y-8">
+                {/* Pythagorean Identity */}
+                <div className="bg-red-50 p-6 rounded-lg border-l-4 border-red-400">
+                  <h4 className="font-semibold text-xl text-red-900 mb-3">1. Pythagorean Identity</h4>
+                  <div className="bg-white p-4 rounded border mb-4 text-center">
                     <code className="text-lg font-bold">sin²(θ) + cos²(θ) = 1</code>
                   </div>
                   <p className="text-red-800 mb-3">
-                    This is the most important identity. It comes from the fact that any point on the unit circle
-                    satisfies x² + y² = 1.
+                    This comes directly from the Pythagorean theorem applied to the unit circle. Since any point on the
+                    unit circle satisfies x² + y² = 1, and sin(θ) = y and cos(θ) = x, we get this fundamental
+                    relationship.
                   </p>
+                  <div className="bg-red-100 p-3 rounded mb-3">
+                    <strong>How to use it:</strong> If you know sin(θ), you can find cos(θ) by rearranging: cos²(θ) = 1
+                    - sin²(θ), so cos(θ) = ±√(1 - sin²(θ))
+                  </div>
                   <div className="bg-red-100 p-3 rounded">
-                    <strong>Musical Application:</strong> Ensures that the total "energy" of a sine wave remains
-                    constant. Used in constant-power panning and maintaining signal levels in audio processing.
+                    <strong>Musical Application:</strong> Ensures constant power in audio panning - the total "energy"
+                    remains the same as sound moves across the stereo field.
                   </div>
                 </div>
 
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-xl text-blue-900 mb-3">Reciprocal Identities</h4>
+                {/* Reciprocal Identities */}
+                <div className="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-400">
+                  <h4 className="font-semibold text-xl text-blue-900 mb-3">2. Reciprocal Identities</h4>
 
-                  {/* Definition Box for Reciprocal Functions */}
-                  <div className="bg-blue-100 p-4 rounded-lg mb-4 border-l-4 border-blue-500">
+                  {/* Definition Box */}
+                  <div className="bg-blue-100 p-4 rounded-lg mb-4 border border-blue-300">
                     <h5 className="font-semibold text-blue-900 mb-2">📚 What are Reciprocal Functions?</h5>
                     <p className="text-blue-800 text-sm mb-3">
-                      The reciprocal trigonometric functions are the "flipped" versions of sine, cosine, and tangent.
-                      Just like how 1/2 is the reciprocal of 2, these functions are 1 divided by the basic trig
-                      functions:
+                      Reciprocal functions are "flipped" versions of the basic trig functions - just like 1/2 is the
+                      reciprocal of 2:
                     </p>
                     <div className="space-y-2 text-sm">
                       <div className="bg-white p-2 rounded">
-                        <strong>Cosecant (csc):</strong> The reciprocal of sine - "co-secant" means "complement of
-                        secant"
+                        <strong>Cosecant (csc):</strong> "co-secant" - the reciprocal of sine
                       </div>
                       <div className="bg-white p-2 rounded">
-                        <strong>Secant (sec):</strong> The reciprocal of cosine - from Latin "secare" meaning "to cut"
+                        <strong>Secant (sec):</strong> From Latin "secare" (to cut) - the reciprocal of cosine
                       </div>
                       <div className="bg-white p-2 rounded">
-                        <strong>Cotangent (cot):</strong> The reciprocal of tangent - "co-tangent" means "complement of
-                        tangent"
+                        <strong>Cotangent (cot):</strong> "co-tangent" - the reciprocal of tangent
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-white p-3 rounded border mb-3">
-                    <div className="space-y-1 text-center">
+                  <div className="bg-white p-4 rounded border mb-4">
+                    <div className="space-y-2 text-center">
                       <div>
-                        <code>csc(θ) = 1/sin(θ)</code> <span className="text-sm text-gray-600">(cosecant)</span>
+                        <code className="text-lg">csc(θ) = 1/sin(θ)</code>{" "}
+                        <span className="text-sm text-gray-600">(cosecant)</span>
                       </div>
                       <div>
-                        <code>sec(θ) = 1/cos(θ)</code> <span className="text-sm text-gray-600">(secant)</span>
+                        <code className="text-lg">sec(θ) = 1/cos(θ)</code>{" "}
+                        <span className="text-sm text-gray-600">(secant)</span>
                       </div>
                       <div>
-                        <code>cot(θ) = 1/tan(θ) = cos(θ)/sin(θ)</code>{" "}
+                        <code className="text-lg">cot(θ) = 1/tan(θ)</code>{" "}
                         <span className="text-sm text-gray-600">(cotangent)</span>
                       </div>
                     </div>
                   </div>
                   <p className="text-blue-800 mb-3">
-                    These define the reciprocal functions: cosecant (csc), secant (sec), and cotangent (cot). They're
-                    undefined when their corresponding basic function equals zero.
+                    <strong>Important:</strong> These functions are undefined when their corresponding basic function
+                    equals zero. For example, csc(0°) is undefined because sin(0°) = 0, and you can't divide by zero.
                   </p>
                   <div className="bg-blue-100 p-3 rounded">
-                    <strong>Musical Application:</strong> Less common in basic audio work, but appear in advanced filter
-                    design and mathematical analysis of audio systems. For example, sec(θ) appears in certain reverb
-                    algorithms.
+                    <strong>Musical Application:</strong> Used in advanced filter design and reverb algorithms where
+                    extreme response curves are needed.
                   </div>
                 </div>
 
-                <div className="bg-green-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-xl text-green-900 mb-3">Quotient Identity</h4>
-                  <div className="bg-white p-3 rounded border mb-3 text-center">
-                    <code className="text-lg">tan(θ) = sin(θ)/cos(θ)</code>
+                {/* Quotient Identities */}
+                <div className="bg-green-50 p-6 rounded-lg border-l-4 border-green-400">
+                  <h4 className="font-semibold text-xl text-green-900 mb-3">3. Quotient Identities</h4>
+                  <div className="bg-white p-4 rounded border mb-4">
+                    <div className="space-y-2 text-center">
+                      <div>
+                        <code className="text-lg">tan(θ) = sin(θ)/cos(θ)</code>
+                      </div>
+                      <div>
+                        <code className="text-lg">cot(θ) = cos(θ)/sin(θ)</code>
+                      </div>
+                    </div>
                   </div>
                   <p className="text-green-800 mb-3">
-                    Tangent is simply the ratio of sine to cosine. This makes it useful for calculating slopes and
-                    ratios.
+                    These show that tangent and cotangent are just ratios of the basic functions. This is why tan(45°) =
+                    1 - because sin(45°) = cos(45°), so their ratio equals 1.
                   </p>
+                  <div className="bg-green-100 p-3 rounded mb-3">
+                    <strong>How to use it:</strong> If you know sin(θ) and cos(θ), you can immediately find tan(θ) by
+                    dividing. No need to memorize separate values!
+                  </div>
                   <div className="bg-green-100 p-3 rounded">
-                    <strong>Musical Application:</strong> Used in calculating frequency ratios, filter slopes, and in
-                    distortion algorithms that use waveshaping.
+                    <strong>Musical Application:</strong> Used for calculating frequency ratios, filter slopes, and in
+                    waveshaping distortion algorithms.
                   </div>
                 </div>
 
-                <div className="bg-purple-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-xl text-purple-900 mb-3">Co-function Identities</h4>
-                  <div className="bg-white p-3 rounded border mb-3">
-                    <div className="space-y-1 text-center">
+                {/* Sum and Difference Identities */}
+                <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-400">
+                  <h4 className="font-semibold text-xl text-purple-900 mb-3">4. Sum and Difference Identities</h4>
+                  <div className="bg-white p-4 rounded border mb-4">
+                    <div className="space-y-2 text-center text-sm">
+                      <div>
+                        <code>sin(A + B) = sin(A)cos(B) + cos(A)sin(B)</code>
+                      </div>
+                      <div>
+                        <code>sin(A - B) = sin(A)cos(B) - cos(A)sin(B)</code>
+                      </div>
+                      <div>
+                        <code>cos(A + B) = cos(A)cos(B) - sin(A)sin(B)</code>
+                      </div>
+                      <div>
+                        <code>cos(A - B) = cos(A)cos(B) + sin(A)sin(B)</code>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-purple-800 mb-3">
+                    These let you find exact values for "non-standard" angles. For example, sin(75°) = sin(45° + 30°),
+                    which you can calculate using the special angles you already know.
+                  </p>
+                  <div className="bg-purple-100 p-3 rounded mb-3">
+                    <strong>Memory tip:</strong> For sine, the signs are the same (+ becomes +, - becomes -). For
+                    cosine, the signs flip (+ becomes -, - becomes +).
+                  </div>
+                  <div className="bg-purple-100 p-3 rounded">
+                    <strong>Musical Application:</strong> Essential for frequency modulation (FM) synthesis, where
+                    complex waveforms are created by adding and subtracting sine waves at different frequencies.
+                  </div>
+                </div>
+
+                {/* Co-function Identities */}
+                <div className="bg-orange-50 p-6 rounded-lg border-l-4 border-orange-400">
+                  <h4 className="font-semibold text-xl text-orange-900 mb-3">5. Co-function Identities</h4>
+                  <div className="bg-white p-4 rounded border mb-4">
+                    <div className="space-y-2 text-center">
                       <div>
                         <code>sin(θ) = cos(90° - θ)</code>
                       </div>
@@ -450,24 +500,25 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
                       </div>
                     </div>
                   </div>
-                  <p className="text-purple-800 mb-3">
-                    These show the relationship between functions and their "co-functions" (complementary functions).
+                  <p className="text-orange-800 mb-3">
+                    These show that sine and cosine are related by a 90° shift. Any function equals its "co-function" of
+                    the complementary angle (angles that add to 90°).
                   </p>
-                  <div className="bg-purple-100 p-3 rounded">
-                    <strong>Musical Application:</strong> Fundamental to quadrature signals in digital signal
-                    processing, where sine and cosine components are 90° out of phase.
+                  <div className="bg-orange-100 p-3 rounded">
+                    <strong>Musical Application:</strong> Fundamental to quadrature signals in digital audio, where I
+                    and Q components are 90° out of phase for complex signal processing.
                   </div>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-yellow-900 mb-2">Why These Matter in Music:</h4>
-                <p className="text-yellow-800 text-sm">
-                  These identities aren't just mathematical curiosities - they're the foundation of digital audio
-                  processing. Every time you use EQ, reverb, compression, or synthesis, the algorithms rely on these
-                  relationships to manipulate sound waves mathematically.
-                </p>
-              </div>
+              <Alert>
+                <BookOpen className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Study Strategy:</strong> Don't try to memorize all these at once! Start with the Pythagorean
+                  identity and quotient identities. Once those feel natural, add the sum/difference identities. The
+                  reciprocal and co-function identities will make sense as you see them used in problems.
+                </AlertDescription>
+              </Alert>
 
               <Button
                 onClick={() => markSectionComplete(2)}
@@ -606,14 +657,42 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Lightbulb className="w-5 h-5 mr-2" />
+                <Target className="w-5 h-5 mr-2" />
                 Practice Exercises
               </CardTitle>
               <CardDescription>
                 Test your understanding of trigonometric functions and their musical applications
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
+              {/* Problem-Solving Guide */}
+              <Alert>
+                <Lightbulb className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="space-y-3">
+                    <h4 className="font-semibold">🎯 Step-by-Step Problem Solving Guide</h4>
+                    <p className="text-sm">Since you're new to trigonometry, here's how to approach these problems:</p>
+
+                    <div className="space-y-2 text-sm">
+                      <div className="bg-blue-50 p-2 rounded">
+                        <strong>Step 1: Identify what you're looking for</strong> - What function? What angle?
+                      </div>
+                      <div className="bg-green-50 p-2 rounded">
+                        <strong>Step 2: Check if it's a special angle</strong> - Is it 0°, 30°, 45°, 60°, or 90°?
+                      </div>
+                      <div className="bg-yellow-50 p-2 rounded">
+                        <strong>Step 3: Use identities if needed</strong> - Can you use sin²+cos²=1 or tan=sin/cos?
+                      </div>
+                      <div className="bg-purple-50 p-2 rounded">
+                        <strong>Step 4: Check your answer</strong> - Does it make sense? Is it in the right range?
+                      </div>
+                    </div>
+
+                    <p className="text-sm font-medium">💡 Remember: sin and cos are always between -1 and 1!</p>
+                  </div>
+                </AlertDescription>
+              </Alert>
+
               <div className="space-y-6">
                 {exercises.map((exercise, index) => (
                   <ExerciseCard
@@ -627,6 +706,32 @@ export default function TrigFunctions({ onComplete }: TrigFunctionsProps) {
                   />
                 ))}
               </div>
+
+              {/* Additional Practice Tips */}
+              <Card className="bg-gradient-to-r from-blue-50 to-purple-50">
+                <CardHeader>
+                  <CardTitle className="text-lg">🚀 Next Steps for Practice</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-sm">
+                    <p>
+                      • <strong>Master the special angles</strong> - They appear in 80% of problems
+                    </p>
+                    <p>
+                      • <strong>Practice the Pythagorean identity</strong> - Use it to find missing values
+                    </p>
+                    <p>
+                      • <strong>Draw pictures</strong> - Sketch triangles or the unit circle to visualize
+                    </p>
+                    <p>
+                      • <strong>Check your calculator</strong> - Make sure it's in the right mode (degrees vs radians)
+                    </p>
+                    <p>
+                      • <strong>Connect to music</strong> - Think about how each concept relates to sound and audio
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </CardContent>
           </Card>
         </TabsContent>

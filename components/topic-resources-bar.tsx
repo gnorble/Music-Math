@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Calculator, Music, BookOpen, Play, Video } from "lucide-react"
+import { ExternalLink, Calculator, Music, BookOpen, Play, Globe } from "lucide-react"
 
 interface Resource {
   title: string
@@ -19,157 +19,131 @@ const resourceDatabase: Record<string, Resource[]> = {
   "trig-intro": [
     {
       title: "History of Trigonometry",
-      description: "Ancient origins and cultural development",
-      url: "https://en.wikipedia.org/wiki/History_of_trigonometry",
+      description: "Ancient origins from Babylon to modern applications",
+      url: "https://mathshistory.st-andrews.ac.uk/HistTopics/Trigonometry/",
       type: "humanities",
     },
     {
       title: "Music and Mathematics",
-      description: "The mathematical basis of musical harmony",
-      url: "https://en.wikipedia.org/wiki/Music_and_mathematics",
+      description: "The deep connection between trigonometry and sound",
+      url: "https://plus.maths.org/content/music-mathematics",
       type: "music",
     },
     {
       title: "Interactive Unit Circle",
-      description: "Explore trigonometric functions visually",
-      url: "https://www.geogebra.org/m/cF7RbKms",
+      description: "Explore angles and coordinates dynamically",
+      url: "https://www.desmos.com/calculator/ur8f9hlnpd",
       type: "interactive",
     },
     {
       title: "Pythagoras and Music",
-      description: "How ancient Greeks connected math and music",
-      url: "https://en.wikipedia.org/wiki/Pythagorean_tuning",
+      description: "How ancient Greeks connected math to harmony",
+      url: "https://www.britannica.com/science/Pythagorean-tuning",
       type: "humanities",
     },
   ],
   "trig-functions": [
     {
-      title: "Sine Wave Generator",
-      description: "Create and hear sine waves at different frequencies",
-      url: "https://www.szynalski.com/tone-generator/",
-      type: "interactive",
-    },
-    {
-      title: "Trigonometry in Music Production",
-      description: "How DAWs use trig functions for audio processing",
-      url: "https://en.wikipedia.org/wiki/Digital_audio_workstation",
-      type: "music",
-    },
-    {
-      title: "Special Angles Calculator",
-      description: "Calculate exact values for common angles",
+      title: "Trigonometry Calculator",
+      description: "Calculate sine, cosine, and tangent values",
       url: "https://www.calculator.net/triangle-calculator.html",
       type: "math",
     },
     {
-      title: "The Science of Sound",
-      description: "Physics and mathematics of sound waves",
-      url: "https://en.wikipedia.org/wiki/Acoustics",
+      title: "Sound Wave Synthesis",
+      description: "How sine waves create all musical sounds",
+      url: "https://www.soundonsound.com/techniques/introduction-sound-synthesis",
+      type: "music",
+    },
+    {
+      title: "Visual Trigonometry",
+      description: "Interactive demonstrations of trig functions",
+      url: "https://www.geogebra.org/m/cF7RbKAh",
+      type: "interactive",
+    },
+    {
+      title: "Renaissance Mathematics",
+      description: "How trigonometry shaped navigation and art",
+      url: "https://www.britannica.com/science/trigonometry/History",
       type: "humanities",
     },
   ],
   "unit-circle": [
     {
-      title: "Unit Circle Trainer",
-      description: "Practice memorizing unit circle values",
-      url: "https://www.khanacademy.org/math/trigonometry",
-      type: "interactive",
+      title: "Unit Circle Memorization",
+      description: "Techniques for remembering special angles",
+      url: "https://www.khanacademy.org/math/trigonometry/trig-function-graphs",
+      type: "math",
     },
     {
-      title: "Circular Motion in Music",
-      description: "How rotation creates musical patterns",
-      url: "https://en.wikipedia.org/wiki/Circle_of_fifths",
+      title: "Phase Relationships in Audio",
+      description: "Understanding stereo imaging and effects",
+      url: "https://www.prosoundnetwork.com/mixing/understanding-phase-relationships",
       type: "music",
     },
     {
-      title: "Ancient Circle Geometry",
-      description: "Historical development of circular mathematics",
-      url: "https://en.wikipedia.org/wiki/History_of_geometry",
-      type: "humanities",
+      title: "Circular Motion Simulator",
+      description: "Visualize how circles create waves",
+      url: "https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html",
+      type: "interactive",
     },
     {
-      title: "Radian vs Degree Converter",
-      description: "Convert between angle measurements",
-      url: "https://www.rapidtables.com/convert/number/radians-to-degrees.html",
-      type: "math",
+      title: "3Blue1Brown: Essence of Trigonometry",
+      description: "Beautiful visual explanation of trig concepts",
+      url: "https://www.youtube.com/watch?v=yBw67Fb31Cs",
+      type: "video",
     },
   ],
   "trig-identities": [
     {
-      title: "Identity Proof Visualizer",
-      description: "See geometric proofs of trig identities",
-      url: "https://www.geogebra.org/m/qzjqzjqz",
-      type: "interactive",
-    },
-    {
-      title: "Audio Phase Relationships",
-      description: "How trig identities affect audio signals",
-      url: "https://en.wikipedia.org/wiki/Audio_signal_processing",
-      type: "music",
-    },
-    {
-      title: "Euler's Identity",
-      description: "The most beautiful equation in mathematics",
-      url: "https://en.wikipedia.org/wiki/Euler%27s_identity",
-      type: "humanities",
-    },
-    {
-      title: "Trig Identity Calculator",
-      description: "Verify and simplify trigonometric expressions",
+      title: "Trigonometric Identity Solver",
+      description: "Tool for verifying and solving identities",
       url: "https://www.symbolab.com/solver/trigonometric-identity-calculator",
       type: "math",
     },
-  ],
-  "calc-intro": [
     {
-      title: "History of Calculus",
-      description: "Newton vs Leibniz and the development of calculus",
-      url: "https://en.wikipedia.org/wiki/History_of_calculus",
-      type: "humanities",
-    },
-    {
-      title: "Calculus in Audio Processing",
-      description: "How derivatives and integrals shape sound",
-      url: "https://en.wikipedia.org/wiki/Digital_signal_processing",
+      title: "Audio Processing Identities",
+      description: "How trig identities are used in DSP",
+      url: "https://www.dspguide.com/ch8.htm",
       type: "music",
     },
     {
-      title: "Interactive Limits",
-      description: "Explore limits with dynamic graphs",
-      url: "https://www.desmos.com/calculator",
+      title: "Identity Proof Explorer",
+      description: "Interactive proofs of fundamental identities",
+      url: "https://www.geogebra.org/m/QNJdW8Av",
       type: "interactive",
     },
     {
-      title: "Calculus Fundamentals",
-      description: "Core concepts and applications",
-      url: "https://www.khanacademy.org/math/calculus-1",
-      type: "math",
+      title: "Islamic Golden Age Mathematics",
+      description: "How medieval scholars developed trigonometry",
+      url: "https://www.britannica.com/science/mathematics/Mathematics-in-the-Islamic-world-8th-15th-century",
+      type: "humanities",
     },
   ],
   "calc-limits": [
     {
       title: "Limit Calculator",
-      description: "Calculate limits step by step",
-      url: "https://www.symbolab.com/solver/limit-calculator",
+      description: "Compute limits step by step",
+      url: "https://www.wolframalpha.com/calculators/limit-calculator",
       type: "math",
     },
     {
       title: "Continuous vs Discrete Audio",
-      description: "How limits relate to digital audio sampling",
-      url: "https://en.wikipedia.org/wiki/Sampling_(signal_processing)",
+      description: "How calculus relates to digital audio",
+      url: "https://www.dspguide.com/ch3.htm",
       type: "music",
     },
     {
-      title: "Zeno's Paradoxes",
-      description: "Ancient philosophical problems solved by limits",
-      url: "https://en.wikipedia.org/wiki/Zeno%27s_paradoxes",
-      type: "humanities",
+      title: "Limit Visualization Tool",
+      description: "See limits graphically",
+      url: "https://www.desmos.com/calculator/qlpeh3vkva",
+      type: "interactive",
     },
     {
-      title: "Interactive Limit Explorer",
-      description: "Visualize approaching limits dynamically",
-      url: "https://www.geogebra.org/m/limit-explorer",
-      type: "interactive",
+      title: "Newton and Leibniz",
+      description: "The invention of calculus",
+      url: "https://www.britannica.com/science/calculus/History",
+      type: "humanities",
     },
   ],
   "calc-derivatives": [
@@ -180,84 +154,58 @@ const resourceDatabase: Record<string, Resource[]> = {
       type: "math",
     },
     {
-      title: "Audio Envelope Shaping",
-      description: "How derivatives control attack, decay, sustain, release",
-      url: "https://en.wikipedia.org/wiki/Envelope_(music)",
+      title: "Envelope Shaping in Synthesis",
+      description: "How derivatives control sound evolution",
+      url: "https://www.soundonsound.com/techniques/adsr-envelopes",
       type: "music",
     },
     {
-      title: "Newton's Method Visualizer",
-      description: "See how derivatives find roots",
-      url: "https://www.geogebra.org/m/newtons-method",
+      title: "Derivative Grapher",
+      description: "Visualize functions and their derivatives",
+      url: "https://www.desmos.com/calculator/2rvtz8pfgm",
       type: "interactive",
     },
     {
       title: "The Calculus Wars",
-      description: "Historical controversy over calculus invention",
-      url: "https://en.wikipedia.org/wiki/Leibniz%E2%80%93Newton_calculus_controversy",
+      description: "Historical development of differential calculus",
+      url: "https://www.smithsonianmag.com/science-nature/greatest-mathematical-feud-ever-leibniz-vs-newton-1684-117909/",
       type: "humanities",
     },
   ],
-  "calc-applications": [
+  "calc-integrals": [
     {
-      title: "Volume Calculator",
-      description: "Calculate volumes using integration",
-      url: "https://www.calculator.net/volume-calculator.html",
-      type: "interactive",
+      title: "Integral Calculator",
+      description: "Solve integrals with detailed steps",
+      url: "https://www.integral-calculator.com/",
+      type: "math",
     },
     {
-      title: "Spectral Analysis Tools",
-      description: "Fourier transforms in music analysis",
-      url: "https://en.wikipedia.org/wiki/Fourier_transform",
+      title: "Area Under Waveforms",
+      description: "RMS and power calculations in audio",
+      url: "https://www.prosoundnetwork.com/mixing/understanding-rms-peak-and-lufs",
       type: "music",
     },
     {
-      title: "Work and Energy Physics",
-      description: "Calculus applications in physics",
-      url: "https://www.khanacademy.org/science/physics",
+      title: "Riemann Sum Visualizer",
+      description: "See how integration works geometrically",
+      url: "https://www.geogebra.org/m/qX75pp8n",
       type: "interactive",
     },
     {
-      title: "Renaissance Engineering",
-      description: "How calculus revolutionized engineering",
-      url: "https://en.wikipedia.org/wiki/History_of_engineering",
+      title: "Archimedes Method of Exhaustion",
+      description: "Ancient roots of integration",
+      url: "https://www.britannica.com/biography/Archimedes/Mathematics",
       type: "humanities",
     },
   ],
 }
 
-const getResourceIcon = (type: Resource["type"]) => {
-  switch (type) {
-    case "math":
-      return <Calculator className="w-4 h-4" />
-    case "music":
-      return <Music className="w-4 h-4" />
-    case "humanities":
-      return <BookOpen className="w-4 h-4" />
-    case "interactive":
-      return <Play className="w-4 h-4" />
-    case "video":
-      return <Video className="w-4 h-4" />
-    default:
-      return <ExternalLink className="w-4 h-4" />
-  }
-}
-
-const getResourceColor = (type: Resource["type"]) => {
-  switch (type) {
-    case "math":
-      return "bg-blue-100 text-blue-800 border-blue-200"
-    case "music":
-      return "bg-purple-100 text-purple-800 border-purple-200"
-    case "humanities":
-      return "bg-green-100 text-green-800 border-green-200"
-    case "interactive":
-      return "bg-orange-100 text-orange-800 border-orange-200"
-    case "video":
-      return "bg-red-100 text-red-800 border-red-200"
-    default:
-      return "bg-gray-100 text-gray-800 border-gray-200"
-  }
+const typeConfig = {
+  math: { icon: Calculator, color: "bg-blue-100 text-blue-800", label: "Math" },
+  music: { icon: Music, color: "bg-purple-100 text-purple-800", label: "Music" },
+  humanities: { icon: BookOpen, color: "bg-amber-100 text-amber-800", label: "Humanities" },
+  interactive: { icon: Globe, color: "bg-green-100 text-green-800", label: "Interactive" },
+  video: { icon: Play, color: "bg-red-100 text-red-800", label: "Video" },
 }
 
 export function TopicResourcesBar({ chapterId }: TopicResourcesBarProps) {
@@ -268,42 +216,39 @@ export function TopicResourcesBar({ chapterId }: TopicResourcesBarProps) {
   }
 
   return (
-    <Card className="mb-6 bg-gradient-to-r from-blue-50 via-purple-50 to-green-50 border-2 border-blue-200">
+    <Card className="bg-gradient-to-r from-slate-50 to-blue-50 border-slate-200">
       <CardContent className="p-4">
-        <div className="flex items-center mb-3">
-          <ExternalLink className="w-5 h-5 mr-2 text-blue-600" />
-          <h3 className="font-semibold text-lg text-blue-900">Topic Resources</h3>
-          <Badge variant="outline" className="ml-2 text-xs">
-            Explore & Learn
-          </Badge>
+        <div className="flex items-center gap-2 mb-3">
+          <ExternalLink className="w-4 h-4 text-slate-600" />
+          <h3 className="font-semibold text-slate-800">Topic Resources</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          {resources.map((resource, index) => (
-            <a
-              key={index}
-              href={resource.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block transition-transform hover:scale-105"
-            >
-              <Card className="h-full hover:shadow-md transition-shadow">
-                <CardContent className="p-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      {getResourceIcon(resource.type)}
-                      <Badge variant="outline" className={`text-xs ${getResourceColor(resource.type)}`}>
-                        {resource.type}
-                      </Badge>
+          {resources.map((resource, index) => {
+            const config = typeConfig[resource.type]
+            const Icon = config.icon
+
+            return (
+              <a key={index} href={resource.url} target="_blank" rel="noopener noreferrer" className="group block">
+                <div className="bg-white p-3 rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all duration-200 hover:scale-[1.02] h-full">
+                  <div className="flex items-start gap-2 mb-2">
+                    <Icon className="w-4 h-4 mt-0.5 text-slate-500 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-sm text-slate-800 group-hover:text-slate-900 line-clamp-1">
+                        {resource.title}
+                      </h4>
                     </div>
-                    <ExternalLink className="w-3 h-3 text-gray-400 flex-shrink-0" />
                   </div>
-                  <h4 className="font-medium text-sm mb-1 line-clamp-2">{resource.title}</h4>
-                  <p className="text-xs text-gray-600 line-clamp-2">{resource.description}</p>
-                </CardContent>
-              </Card>
-            </a>
-          ))}
+
+                  <p className="text-xs text-slate-600 mb-2 line-clamp-2">{resource.description}</p>
+
+                  <Badge variant="secondary" className={`text-xs ${config.color}`}>
+                    {config.label}
+                  </Badge>
+                </div>
+              </a>
+            )
+          })}
         </div>
       </CardContent>
     </Card>
