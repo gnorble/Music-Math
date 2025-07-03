@@ -1,6 +1,6 @@
 export const courseData = {
   trigonometry: {
-    title: "Trigonometry for Musicians",
+    title: "Trigonometry Examples for Musicians",
     description: "Explore the mathematical foundations of waves, oscillations, and periodic motion in music",
     chapters: [
       {
@@ -67,7 +67,7 @@ export const courseData = {
     ],
   },
   calculus: {
-    title: "Calculus for Audio Processing",
+    title: "Calculus Examples for Audio Processing",
     description: "Master the mathematics of change and accumulation in musical contexts",
     chapters: [
       {
